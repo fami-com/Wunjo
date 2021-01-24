@@ -4,7 +4,7 @@
 
 #ifndef WUNJO_NUMBER_H
 #define WUNJO_NUMBER_H
-
+#include <gmpxx.h>
 
 class Number {
 
