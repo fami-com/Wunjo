@@ -1,5 +1,7 @@
 //
-// Created by V on 2021-01-25.
+// This file is licensed under MPL 2.0, GNU GPL v2.0+ and GNU LGPL v2.1+
+// For more information about the licensing, see the LICENSE file in the project root
+// Copyright (c) 2021 - 2021 fami-com
 //
 
 #ifndef WUNJO_INTEGER_H
