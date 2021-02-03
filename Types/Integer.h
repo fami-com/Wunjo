@@ -5,60 +5,81 @@
 #ifndef WUNJO_INTEGER_H
 #define WUNJO_INTEGER_H
 
-#include <cstdint>
+#include "Common.h"
 
-#include "Number.h"
+namespace Types {
+    class Integer {
+        const int64_t number;
 
-class Integer : public Number {
-    int64_t number;
+        friend Rational;
+        friend Float;
+        friend Complex;
+    public:
 
-    friend Rational;
-    friend Float;
-    friend Complex;
-public:
-    [[nodiscard]] constexpr int64_t get_number() const noexcept {
-        return number;
-    }
+        constexpr Integer() noexcept;
+        constexpr Integer(int64_t data) noexcept;
 
-    constexpr Integer() noexcept;
+        constexpr Integer(const Integer& data) noexcept;
 
-    template <class T>
-    constexpr Integer(T data) noexcept
-        requires(std::is_integral_v<T> &&
-                 std::numeric_limits<T>::max <= std::numeric_limits<int64_t>::max &&
-                 std::numeric_limits<T>::min >= std::numeric_limits<int64_t>::min);
+        Integer operator+() const noexcept;
+        Integer operator-() const noexcept;
+        Integer operator~() const noexcept;
 
-    constexpr Integer(const Integer& data) noexcept;
+        Integer operator&(const Integer& rhs) const noexcept;
+        Integer operator|(const Integer& rhs) const noexcept;
+        Integer operator^(const Integer& rhs) const noexcept;
+        Integer operator<<(const Integer& rhs) const noexcept;
+        Integer operator>>(const Integer& rhs) const noexcept;
 
-    unique_ptr<Number> operator+() const noexcept override;
-    unique_ptr<Number> operator-() const noexcept override;
-    unique_ptr<Number> operator~() const noexcept override;
+        Integer operator+(const Integer& rhs) const noexcept;
+        Integer operator-(const Integer& rhs) const noexcept;
+        Integer operator*(const Integer& rhs) const noexcept;
+        Integer operator%(const Integer& rhs) const;
+        Rational operator/(const Integer& rhs) const;
 
-    unique_ptr<Integer> operator&(unique_ptr<Integer> rhs) const noexcept;
-    unique_ptr<Integer> operator|(unique_ptr<Integer> rhs) const noexcept;
-    unique_ptr<Integer> operator^(unique_ptr<Integer> rhs) const noexcept;
-    unique_ptr<Integer> operator<<(unique_ptr<Integer> rhs) const noexcept;
-    unique_ptr<Integer> operator>>(unique_ptr<Integer> rhs) const noexcept;
+        Rational operator+(const Rational& rhs) const noexcept;
+        Rational operator-(const Rational& rhs) const noexcept;
+        Rational operator*(const Rational& rhs) const noexcept;
+        Rational operator%(const Rational& rhs) const;
+        Rational operator/(const Rational& rhs) const;
 
-    unique_ptr<Number> operator+(unique_ptr<Number> rhs) const noexcept override;
-    unique_ptr<Number> operator-(unique_ptr<Number> rhs) const noexcept override;
-    unique_ptr<Number> operator*(unique_ptr<Number> rhs) const noexcept override;
-    unique_ptr<Number> operator/(unique_ptr<Number> rhs) const override;
-    unique_ptr<Number> operator%(unique_ptr<Number> rhs) const override;
+        Float operator+(const Float& rhs) const noexcept;
+        Float operator-(const Float& rhs) const noexcept;
+        Float operator*(const Float& rhs) const noexcept;
+        Float operator%(const Float& rhs) const;
+        Float operator/(const Float& rhs) const;
 
-    std::strong_ordering operator<=>(unique_ptr<Number> rhs) const noexcept override;
+        Complex operator+(const Complex& rhs) const noexcept;
+        Complex operator-(const Complex& rhs) const noexcept;
+        Complex operator*(const Complex& rhs) const noexcept;
+        Complex operator%(const Complex& rhs) const;
+        Complex operator/(const Complex& rhs) const;
 
-    [[nodiscard]] unique_ptr<Number> div(unique_ptr<Number> rhs) const noexcept override;
-    [[nodiscard]] unique_ptr<Number> mod(unique_ptr<Number> rhs) const noexcept override;
-    [[nodiscard]] unique_ptr<Number> pow(unique_ptr<Number> rhs) const noexcept override;
+        std::strong_ordering operator<=>(const Integer& rhs) const noexcept;
 
-    [[nodiscard]] unique_ptr<Number> floor() const noexcept override;
-    [[nodiscard]] unique_ptr<Number> ceil() const noexcept override;
-    [[nodiscard]] unique_ptr<Number> round() const noexcept override;
+        [[nodiscard]] Integer div(const Integer& rhs) const noexcept;
+        [[nodiscard]] Integer mod(const Integer& rhs) const noexcept;
+        [[nodiscard]] std::variant<Integer,Rational> pow(const Integer& rhs) const;
 
-    [[nodiscard]] bool is_zero() const noexcept override {
-        return number == 0;
-    }
-};
+        [[nodiscard]] Integer div(const Rational& rhs) const noexcept;
+        [[nodiscard]] Rational mod(const Rational& rhs) const noexcept;
+        [[nodiscard]] Float pow(const Rational& rhs) const;
 
+        [[nodiscard]] Integer div(const Float& rhs) const noexcept;
+        [[nodiscard]] Float mod(const Float& rhs) const noexcept;
+        [[nodiscard]] Float pow(const Float& rhs) const;
+
+        //[[nodiscard]] Integer div(Complex rhs) const noexcept;
+        //[[nodiscard]] Float mod(Complex rhs) const noexcept;
+        [[nodiscard]] Complex pow(const Complex& rhs) const;
+
+        [[nodiscard]] Integer floor() const noexcept;
+        [[nodiscard]] Integer ceil() const noexcept;
+        [[nodiscard]] Integer round() const noexcept;
+
+        [[nodiscard]] bool is_zero() const noexcept {
+            return number == 0;
+        }
+    };
+}
 #endif //WUNJO_INTEGER_H
